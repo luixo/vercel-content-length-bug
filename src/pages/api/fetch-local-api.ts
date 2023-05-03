@@ -7,6 +7,7 @@ export default async function handler(
   let baseUrl =
     req.query.baseUrl || `http://${process.env.VERCEL_URL || "127.0.0.1:3000"}`;
   try {
+    console.log("global.fetch", Boolean(global.fetch));
     const response = await fetch(`${baseUrl}/api/hello`, {
       headers: {
         "Content-Type": "application/json",
@@ -16,6 +17,11 @@ export default async function handler(
     });
     res.json(await response.json());
   } catch (e: any) {
-    res.json({ error: String(e), stack: e.stack, cause: e.cause });
+    res.json({
+      error: String(e),
+      stack: e.stack,
+      cause: e.cause,
+      nodeVersion: process.version,
+    });
   }
 }
